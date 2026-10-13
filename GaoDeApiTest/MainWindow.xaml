@@ -1,0 +1,141 @@
+﻿<Window x:Class="GaoDeApiTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GaoDeApiTest"
+        mc:Ignorable="d"
+        Title="高德团购API测试工具" Height="810" MinHeight="600" Width="1200" MinWidth="800">
+    <Window.Resources>
+        <Style x:Key="ResizableTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ABAdB3"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid Background="Transparent">
+
+                            <Border x:Name="border" 
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        SnapsToDevicePixels="True">
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" Margin="0,0,0,3"/>
+                            </Border>
+
+                            <Thumb VerticalAlignment="Bottom" 
+                           Height="6" 
+                           Margin="0,0,0,-3" 
+                           Cursor="SizeNS" 
+                           DragDelta="Thumb_DragDelta"
+                           Background="Transparent">
+                                <Thumb.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent" BorderBrush="Transparent" Height="6"/>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#569DE5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel Margin="0,0,0,20">
+
+            <GroupBox Margin="10" Header="配置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">商家Comid</TextBlock>
+                    <TextBox Grid.Column="1" Name="Txt_Comid" Text="{Binding Comid}" Height="36" Margin="10" VerticalContentAlignment="Center" />
+                    <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">应用AppId</TextBlock>
+                    <TextBox Grid.Column="3" Name="Txt_AppId" Text="{Binding AppId}" Height="36" Margin="10" VerticalContentAlignment="Center" />
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">密钥KEY</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="Txt_Key" Text="{Binding Key}" Height="36" Margin="10 0" VerticalContentAlignment="Center" />
+                    <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">AppSecret</TextBlock>
+                    <TextBox Grid.Column="3" Grid.Row="1" Name="Txt_AppSecret" Text="{Binding AppSecret}" Height="36" Margin="10 0" VerticalContentAlignment="Center" />
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">商户主体id</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="2" Name="Txt_AccessId" Text="{Binding AccessId}" Height="36" Margin="10" VerticalContentAlignment="Center" />
+                    <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">测试环境</TextBlock>
+                    <CheckBox Grid.Column="3" Grid.Row="2" Name="Chk_IsTest" IsChecked="{Binding IsTest}" Height="36" Margin="10" VerticalContentAlignment="Center" />
+                </Grid>
+            </GroupBox>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">接口</TextBlock>
+                <ComboBox Grid.Column="1" Name="Com_Api" ItemsSource="{Binding ApiModels}" DisplayMemberPath="DisplayName" SelectedIndex="0"  Height="36" Margin="10" VerticalContentAlignment="Center" SelectionChanged="Com_Api_SelectionChanged"/>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,15">入参</TextBlock>
+                <TextBox Grid.Column="1" Name="Txt_Parm" Height="120" MinHeight="60" Text="{Binding ApiParm}" AcceptsReturn="True"  TextWrapping="Wrap"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="TextBox_PreviewMouseWheel" Style="{StaticResource ResizableTextBoxStyle}" ToolTip="入参" Margin="10 5">
+                </TextBox>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Name="Btn_Exec" Height="36" VerticalContentAlignment="Center" Margin="10 5" Click="Button_Click">执行</Button>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,15">请求</TextBlock>
+                <TextBox Grid.Column="1" Name="Txt_Req" Height="120" MinHeight="60" Text="{Binding ApiReq}" AcceptsReturn="True"  TextWrapping="Wrap"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="TextBox_PreviewMouseWheel" Style="{StaticResource ResizableTextBoxStyle}" ToolTip="请求" Margin="10 5"/>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,15">返回</TextBlock>
+                <TextBox Grid.Column="1" Name="Txt_Res" Height="120" MinHeight="60" Text="{Binding ApiRes}" AcceptsReturn="True"  TextWrapping="Wrap"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="TextBox_PreviewMouseWheel" Style="{StaticResource ResizableTextBoxStyle}" ToolTip="返回" Margin="10 5"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,15">出参</TextBlock>
+                <TextBox Grid.Column="1" Name="Txt_Out" Height="150" MinHeight="60" Text="{Binding ApiOut}" AcceptsReturn="True"  TextWrapping="Wrap"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="TextBox_PreviewMouseWheel" Style="{StaticResource ResizableTextBoxStyle}" ToolTip="出参" Margin="10 5"/>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>
